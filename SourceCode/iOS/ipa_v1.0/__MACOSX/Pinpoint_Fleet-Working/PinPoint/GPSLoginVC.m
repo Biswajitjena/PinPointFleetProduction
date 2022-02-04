@@ -171,7 +171,7 @@
   
     
     NSString *strURL=[NSString stringWithFormat:@"%@/PinPointFleet/opengts?reqType=auth",LiveURL];
-    
+    NSLog(@"Login URL:%@",strURL);
     NSURL *aUrl = [NSURL URLWithString:strURL];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:aUrl

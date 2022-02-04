@@ -20,8 +20,8 @@
 {
     // Override point for customization after application launch.
     
-    [GMSServices provideAPIKey:@"AIzaSyAjo2qe2JurR0kYmS9PVhbHGtSiSBGldUo"];
-    
+    //[GMSServices provideAPIKey:@"AIzaSyAjo2qe2JurR0kYmS9PVhbHGtSiSBGldUo"];
+    [GMSServices provideAPIKey:@"AIzaSyBEKChGLxcmztgAX_bqBtceBKkDnmnKcNQ"]; // NEW KEY from parth@entrust-us.com, Dt:21 Jan 22
     
     NSLog(@"self.view bound %f",self.window.frame.size.height);
         

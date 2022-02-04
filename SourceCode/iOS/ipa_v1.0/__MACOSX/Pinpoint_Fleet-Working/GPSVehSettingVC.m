@@ -304,6 +304,33 @@
 //    }];
     
 }
+- (IBAction)btnLast24HourClicked:(UIButton *)sender {
+    //Start Day for current Date
+    NSCalendar *cal = [NSCalendar currentCalendar];
+
+    NSDateComponents *comps = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:[NSDate date]];
+    [comps setHour:-24];
+    [comps setMinute:0];
+    [comps setSecond:0];
+
+    NSDate *midnightOfToday = [cal dateFromComponents:comps];
+    //====
+    self.txtStartDate.text = [df stringFromDate:midnightOfToday];
+    self.txtEndDate.text = [df stringFromDate:[NSDate date]];
+}
+- (IBAction)last3DaysButtonClicked:(UIButton *)sender {
+    NSCalendar *cal = [NSCalendar currentCalendar];
+
+    NSDateComponents *comps = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:[NSDate date]];
+    [comps setHour:-72];
+    [comps setMinute:0];
+    [comps setSecond:0];
+
+    NSDate *midnightOfToday = [cal dateFromComponents:comps];
+    //====
+    self.txtStartDate.text = [df stringFromDate:midnightOfToday];
+    self.txtEndDate.text = [df stringFromDate:[NSDate date]];
+}
 
 -(void)showAlert:(NSString*)Title {
     

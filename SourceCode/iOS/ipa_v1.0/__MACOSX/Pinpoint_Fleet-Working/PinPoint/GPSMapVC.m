@@ -1100,7 +1100,7 @@
              id jsonData       = [NSJSONSerialization JSONObjectWithData: [responseBody dataUsingEncoding:NSUTF8StringEncoding]
                                                                  options: NSJSONReadingMutableContainers
                                                                    error: &error];
-             NSLog(@"Return Data Classtype -- %@",[jsonData class]);
+             NSLog(@"Return Data Classtype -- %@",responseBody);
 //             NSLog(@"Return Data %@",[jsonData description]);
              
              if ([jsonData isKindOfClass:[NSDictionary class]]) { //1-2
@@ -1432,6 +1432,46 @@
 //    
 //    
 //}
+- (void)mapView:(GMSMapView *)mapView didTapInfoWindowOfMarker:(GMSMarker *)marker{
+    NSLog(@"didTapInfoWindowOfMarker-------");
+    NSMutableArray *temp = [objDelegate.arrDeviceIDName valueForKey:@"name"];
+    NSString *trimmedString = [[marker.userData objectForKey:@"id"] stringByTrimmingCharactersInSet:
+                               [NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    int indexValue = [temp indexOfObjectPassingTest:^BOOL(NSString *obj, NSUInteger idx, BOOL *stop) {
+        return [obj caseInsensitiveCompare:trimmedString] == NSOrderedSame;
+    }];
+
+    NSLog(@"Index:%d",indexValue);
+    
+    if(indexValue >= 0)
+    {
+    NSString *deviceID = [[objDelegate.arrDeviceIDName objectAtIndex:indexValue] valueForKey:@"deviceID"];
+    NSLog(@"Device ID:%@",deviceID);
+        NSCalendar *cal = [NSCalendar currentCalendar];
+
+        NSDateComponents *comps = [cal components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute) fromDate:[NSDate date]];
+        [comps setHour:-24];
+        [comps setMinute:0];
+        [comps setSecond:0];
+
+        NSDate *midnightOfToday = [cal dateFromComponents:comps];
+        //====
+        
+        NSDate *dateStart = midnightOfToday;
+        NSDate *dateEnd = [NSDate date];
+        
+       [df setDateFormat:@"MM/dd/yyyy HH:mm"];
+       
+        NSDictionary *dic = @{@"Fr_Dt":[df stringFromDate:dateStart],@"To_Dt":[df stringFromDate:dateEnd],@"VehID":deviceID};
+       
+        objDelegate.dicVehSetting = [dic mutableCopy];
+           
+       [[NSNotificationCenter defaultCenter]postNotificationName:@"LoadMapForCurrentDate" object:nil userInfo:dic];
+
+       NSLog(@"dic description -- %@ && objAppDelegate.dicVehSetting --> %@",[dic description],[objDelegate.dicVehSetting description]);
+        objDelegate.isLoadAllData = FALSE;
+    }
+}
 
 - (UIView *)mapView:(GMSMapView *)mapView markerInfoWindow:(GMSMarker *)marker{
     
