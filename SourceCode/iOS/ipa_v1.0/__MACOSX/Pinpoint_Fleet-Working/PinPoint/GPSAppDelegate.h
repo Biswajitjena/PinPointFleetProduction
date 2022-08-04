@@ -13,7 +13,8 @@
 //#define LiveURL @"http://192.168.111.91:8081" //Local
 
 //#define LiveURL  @"http://199.87.53.154:8080"
-#define LiveURL  @"http://209.145.61.6:8080" // Changed IP On 22Nov21, FleetAnalytics - Gary's IP
+#define LiveURL  @"http://209.145.61.7:8080" // Changed IP On 22Nov21, FleetAnalytics - Gary's IP
+//#define LiveURL  @"http://209.145.61.6:8080" // Changed IP On 22Nov21, FleetAnalytics - Gary's IP
 //#define LiveURL  @"http://18.117.142.44:8080" // Changed IP On 23Dec21
 //#define LiveURL  @"http://3.17.248.193:8080" // Changed IP On 18 Jan22, This is Brian Server IP
 @interface GPSAppDelegate : UIResponder <UIApplicationDelegate>
