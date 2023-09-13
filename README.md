@@ -1,4 +1,4 @@
-# PinPointFleetProduction
+# PinPoint Fleet iOS Application
 PinPoint Fleet Mobile application
 
 ## Version 1.3
