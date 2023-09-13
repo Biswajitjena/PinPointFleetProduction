@@ -1,30 +1,83 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '26.0.2'
+
+    compileSdkVersion 34
+    namespace 'com.fleetanalytics.pinpointmobile'
+//    namespace 'com.pinpointfleet'
+    //buildToolsVersion '26.0.2'
 
     defaultConfig {
-        applicationId "com.pinpointfleet"
-        minSdkVersion 12
-        targetSdkVersion 17
-        versionCode 4
-        versionName "1.3"
+        applicationId 'com.fleetanalytics.pinpointmobile'
+        minSdkVersion 21
+//        minSdkVersion 24
+        targetSdkVersion 34
+        versionCode 3
+        versionName "1.2"
     }
+
+    /* uncomment in release mode and change storeFile location to your .jks file location*/
+    signingConfigs {
+        debug {
+            storeFile file('app/keystores/pin_point_keytool_new_17Feb22')
+            storePassword 'Fleet@2022'
+            keyAlias 'Fleet_Analytics_PinPoint_alias'
+            keyPassword 'Fleet@2022'
+        }
+        release {
+            storeFile file('app/keystores/pin_point_keytool_new_17Feb22')
+            storePassword 'Fleet@2022'
+            keyAlias 'Fleet_Analytics_PinPoint_alias'
+            keyPassword 'Fleet@2022'
+        }
+    }
+
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    /* comment in release mode this is for debug mode */
+
+//    buildTypes {
+//        release {
+//            signingConfig signingConfigs.debug
+//        }
+//    }
+
+
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
+
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:support-v4:24.0.0'
-    compile 'com.google.android.gms:play-services-location:7.+'
-    compile 'com.loopj.android:android-async-http:1.4.9'
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.13.2'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+
+//    api 'com.google.android.gms:play-services-location:9.6.1'
+//    api 'com.google.android.gms:play-services-maps:9.6.1'
+
+    implementation 'com.loopj.android:android-async-http:1.4.11'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+//    implementation 'com.squareup.retrofit2o:retrofit:2.7.2'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
 }
 

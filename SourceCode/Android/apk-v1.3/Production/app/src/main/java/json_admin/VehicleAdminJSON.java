@@ -9,7 +9,7 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 
 import android.app.Activity;
 import android.content.Context;

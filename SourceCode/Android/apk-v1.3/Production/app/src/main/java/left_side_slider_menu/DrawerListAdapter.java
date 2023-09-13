@@ -3,7 +3,7 @@ package left_side_slider_menu;
 
 import java.util.ArrayList;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 
 import android.app.Activity;
 import android.content.Context;

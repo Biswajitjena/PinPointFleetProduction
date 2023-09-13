@@ -30,7 +30,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 import com.pinpointfleet.Utils;
 
 public class EditRolesActivity extends Activity {

@@ -20,7 +20,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 import com.pinpointfleet.Utils;
 
 public class ViewUserAdminDetailsActivity extends Activity {

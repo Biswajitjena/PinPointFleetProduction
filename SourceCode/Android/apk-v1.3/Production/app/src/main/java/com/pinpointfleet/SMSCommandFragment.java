@@ -1,7 +1,7 @@
 package com.pinpointfleet;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.telephony.gsm.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.fleetanalytics.pinpointmobile.R;
 
 public class SMSCommandFragment extends Fragment {
 

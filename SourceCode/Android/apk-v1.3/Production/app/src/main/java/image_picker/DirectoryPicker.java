@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 
 import android.app.ActionBar;
 import android.app.ListActivity;

@@ -13,9 +13,11 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
+
+import androidx.annotation.NonNull;
+import androidx.legacy.app.ActionBarDrawerToggle;
+import androidx.fragment.app.Fragment;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.text.InputType;
 import android.util.Log;
 import android.view.InflateException;
@@ -43,6 +45,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -50,7 +53,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.pinpointfleet.MapSettingsActivity;
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 import com.pinpointfleet.Utils;
 
 import org.json.JSONArray;
@@ -68,7 +71,7 @@ import json_parsing.MapDetailsJSON;
 import slider.Product.SubCategory;
 import slider.Product.SubCategory.ItemList;
 
-public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeListener {
+public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeListener, OnMapReadyCallback {
 
     GoogleMap googleMap;
     private static View view;
@@ -144,60 +147,56 @@ public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeList
 
                         SupportMapFragment supportMapFragment = ((SupportMapFragment) getChildFragmentManager()
                                 .findFragmentById(R.id.map));
-                        googleMap = supportMapFragment.getMap();
-                        if (googleMap != null) {
-                            new DeviceListAsync().execute();
-                        }
+                         supportMapFragment.getMapAsync(this);
+//                        googleMap = supportMapFragment.getMap();
+//                        googleMap
+//                        if (googleMap != null) {
+//                            new DeviceListAsync().execute();
+//                        }
                     }
                 } else {
                     ToastOnUI(getResources().getString(R.string.no_internet_connection));
                 }
 
-                try {
-                    googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
-                        @Override
-                        public boolean onMarkerClick(Marker m) {
-
-                            try {
-                                arrayId = Integer.parseInt(m.getTitle());
-                            } catch (Exception e) {
-
-                                e.printStackTrace();
-
-                            }
-
-                            return false;
-                        }
-                    });
-
-                    googleMap.setInfoWindowAdapter(new
-
-                                                           InfoWindowAdapter() {
-
-                                                               @Override
-                                                               public View getInfoWindow
-
-                                                                       (Marker arg0) {
-                                                                   return null;
-                                                               }
-
-                                                               @Override
-                                                               public View getInfoContents
-
-                                                                       (Marker arg0) {
-                                                                   View v =
-
-                                                                           inflater.inflate(
-
-                                                                                   R.layout.info_window_layout, null);
-
-                                                                   showCustomToolTip(v);
-                                                                   return v;
-                                                               }
-                                                           });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+//                        @Override
+//                        public boolean onMarkerClick(Marker m) {
+//
+//                            try {
+//                                arrayId = Integer.parseInt(m.getTitle());
+//                            } catch (Exception e) {
+//
+//                                e.printStackTrace();
+//
+//                            }
+//
+//                            return false;
+//                        }
+//                    });
+//
+//                    googleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+//
+//                                                               @Override
+//                                                               public View getInfoWindow(Marker arg0) {
+//                                                                   View v = inflater.inflate(R.layout.info_window_layout, null);
+//
+//                                                                   showCustomToolTip(v);
+//                                                                   return v;
+////                                                                   return null;
+//                                                               }
+//
+//                                                               @Override
+//                                                               public View getInfoContents(Marker arg0) {
+//                                                                   View v = inflater.inflate(R.layout.info_window_layout, null);
+//
+//                                                                   showCustomToolTip(v);
+//                                                                   return v;
+//                                                               }
+//                                                           });
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
             } catch (InflateException e) {
             }
 
@@ -336,6 +335,55 @@ public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeList
         }
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMaps) {
+        googleMap=googleMaps;
+        if (googleMap != null) {
+            new DeviceListAsync().execute();
+            try {
+                googleMap.setOnMarkerClickListener(new OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker m) {
+
+                        try {
+                            arrayId = Integer.parseInt(m.getTitle());
+                        } catch (Exception e) {
+
+                            e.printStackTrace();
+
+                        }
+
+                        return false;
+                    }
+                });
+
+                googleMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+
+                    @Override
+                    public View getInfoWindow(Marker arg0) {
+//                        View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+////                        View v = inflater.inflate(R.layout.info_window_layout, null);
+//
+//                        showCustomToolTip(v);
+//                        return v;
+                                                                   return null;
+                    }
+
+                    @Override
+                    public View getInfoContents(Marker arg0) {
+                        View v = getLayoutInflater().inflate(R.layout.info_window_layout, null);
+//                        View v = inflater.inflate(R.layout.info_window_layout, null);
+
+                        showCustomToolTip(v);
+                        return v;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     class DeviceListAsync extends AsyncTask<Void, Void, Void> {
 
         ProgressDialog progDailog;
@@ -421,8 +469,8 @@ public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeList
             String time_zone = params[3].toString();
             boolean onlyLatestData = Boolean.parseBoolean(params[4]);
             String response = new MapDetailsJSON().mapDetails(getActivity(), deviceId, date_from, date_to);
-            Log.v("MappingFragmentFinal-MapDetailsAsync", "deviceID:" + deviceId);
-            Log.v("MapDetailsAsync-Response:", ":" + response);
+            Log.v("MappingFragmentFinal", "deviceID:" + deviceId);
+            Log.v("MapDetailsAsync", ":" + response);
             if (response != null) {
                 try {
                     mdd = new ArrayList<MapDetailsData>();
@@ -508,7 +556,7 @@ public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeList
             String deviceId = params[0].toString();
             //String time_zone = params[3].toString();
             String response = new MapDetailsJSON().getLastMapDetails(getActivity(), deviceId);
-            Log.v("LastMapDetailsAsync:" + deviceId + ":Response:", ":" + response);
+            Log.v("LastMapAsync:" + deviceId + ":Response:", ":" + response);
             if (response != null) {
                 try {
                     mdd = new ArrayList<MapDetailsData>();
@@ -989,7 +1037,7 @@ public class MappingFragmentNEW2 extends Fragment implements OnCheckedChangeList
                                 // saveMapPreference(sb.toString(),
                                 // getCurrentDate(),getCurrentDate(),
                                 // "GMT",true);
-                                Log.v("Selected Group Device IDS:", ":" + sb.toString());
+                                Log.v("SelectedGrpDeviceIDS:", ":" + sb.toString());
                                 new FirsttimeAllDeviceLoad().execute(sb.toString());
                             } else {
                                 ToastOnUI(getResources().getString(R.string.no_internet_connection));

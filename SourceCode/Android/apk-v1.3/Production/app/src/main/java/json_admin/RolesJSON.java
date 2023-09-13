@@ -14,7 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 
 public class RolesJSON {
 

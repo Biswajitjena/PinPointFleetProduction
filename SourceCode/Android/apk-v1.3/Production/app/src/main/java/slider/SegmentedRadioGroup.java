@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.RadioGroup;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 
 public class SegmentedRadioGroup extends RadioGroup {
 

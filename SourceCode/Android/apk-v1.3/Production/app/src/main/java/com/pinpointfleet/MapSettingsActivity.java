@@ -28,163 +28,245 @@ import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import com.fleetanalytics.pinpointmobile.R;
+
 import json_parsing.DeviceListData;
 
 public class MapSettingsActivity extends Activity {
 
-	Spinner spDeviceMap;
-	TextView tvFromDate, tvToDate,tvFromTime,tvToTime;
-	//String backFrom, backTo;
-	Button btnUpdate, btnCancel;
+    Spinner spDeviceMap;
+    TextView tvFromDate, tvToDate, tvFromTime, tvToTime;
+    //String backFrom, backTo;
+    Button btnUpdate, btnCancel;
 
-	//private int year;
-	//private int month;
-	//private int day;
-	//static final int DATE_DIALOG_ID = 999;
-	//static final int TIME_DIALOG_ID = 888;
-	boolean isFromDate = false,isFromTime = false;
-	private ArrayAdapter<String> deviceList;
-	ArrayList<DeviceListData> mList;
+    //private int year;
+    //private int month;
+    //private int day;
+    //static final int DATE_DIALOG_ID = 999;
+    //static final int TIME_DIALOG_ID = 888;
+    boolean isFromDate = false, isFromTime = false;
+    private ArrayAdapter<String> deviceList;
+    ArrayList<DeviceListData> mList;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_map_settings);
-		init();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_map_settings);
+        init();
 
-		tvFromDate.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				isFromDate = true;
-				DialogFragment dialogfragment = new DatePickerDialogTheme();
-				dialogfragment.show(getFragmentManager(), "From Date");
-			}
-		});
+        tvFromDate.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                isFromDate = true;
+//                DialogFragment dialogfragment = new DatePickerDialogTheme();
+//                dialogfragment.show(getFragmentManager(), "From Date");
+//                dialogfragment.show(getFragmentManager(), "From Date");
+                // Get Current Date
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-		tvToDate.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				isFromDate = false;
-				DialogFragment dialogfragment = new DatePickerDialogTheme();
-				dialogfragment.show(getFragmentManager(), "To Date");
-			}
-		});
 
-		tvFromTime.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				isFromTime = true;
-				DialogFragment timeDialogFragment = new TimePickerDialogTheme();
-				timeDialogFragment.show(getFragmentManager(), "From Time");
-			}
-		});
-		tvToTime.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				isFromTime = false;
-				DialogFragment timeDialogFragment = new TimePickerDialogTheme();
-				timeDialogFragment.show(getFragmentManager(), "From Time");
-			}
-		});
-		
-		btnCancel.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				MapSettingsActivity.this.finish();
-			}
-		});
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MapSettingsActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
 
-		btnUpdate.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
 
-				try {
-					String deviceId = mList.get(spDeviceMap.getSelectedItemPosition()).getDeviceID().toString();
-					Log.v("DeviceID:" + deviceId, ":" + deviceId);
-					
-					 String stvFromDate = tvFromDate.getText().toString(); 
-					 String stvToDate = tvToDate.getText().toString();
-					 String stvToTime = tvToTime.getText().toString();
-					 String stvFromTime = tvFromTime.getText().toString();
-					 
-					//String stvFrom = backFrom;
-					//String stvTo = backTo;
-					SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-					Date dfr = format.parse(stvFromDate);
-					Date dto = format.parse(stvToDate);
-					Date currentDate = new Date();
-					
-					if(!stvFromDate.equals("") && !stvFromTime.equals("") && !stvToDate.equals("") && !stvToTime.equals("")){
-					
-						if ((dfr.before(dto) || dfr.equals(dto)) && (dfr.before(currentDate) || dfr.equals(currentDate))
-								&& (dto.before(currentDate) || dfr.equals(currentDate))) {
+                                tvFromDate.setText(String.format("%02d", monthOfYear + 1) + "/" + String.format("%02d", dayOfMonth) + "/" + year);
 
-							Intent returnIntent = new Intent();
-							returnIntent.putExtra("deviceID", deviceId);
-							// Have set fromDate in 'To' parameter & toDate in 'From' parameter because of Web service has set it by mistake.
-							//Because of we do not want to change API war file we have set it in mobile app end. DT:19th AUG 2017  
-							returnIntent.putExtra("to", stvFromDate+" "+stvFromTime);
-							returnIntent.putExtra("from", stvToDate+" "+stvToTime);
-							returnIntent.putExtra("timeZone", "GMT");
-							setResult(RESULT_OK, returnIntent);
-							finish();
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
 
-						} else {
-							new Utils().showToast(getApplicationContext(),
-									getResources().getString(R.string.invalid_date_range));
-						}
-						
-					}else{
-						new Utils().showToast(getApplicationContext(), getResources().getString(R.string.all_fields_are_required));
-					}
-				} catch (NullPointerException e) {
-					new Utils().showToast(getApplicationContext(), getResources().getString(R.string.enter_date_first));
-				} catch (Exception e) {
-					e.printStackTrace();
-					new Utils().showToast(getApplicationContext(), getResources().getString(R.string.error));
-				}
-			}
-		});
 
-	}
+            }
+        });
 
-	public void init() {
+        tvToDate.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                isFromDate = false;
+//                DialogFragment dialogfragment = new DatePickerDialogTheme();
+//                dialogfragment.show(getFragmentManager(), "To Date");
 
-		try {
-			spDeviceMap = (Spinner) findViewById(R.id.spDeviceMap);
-			// spTimeZone = (Spinner) findViewById(R.id.spTimeZone);
-			tvFromDate = (TextView) findViewById(R.id.tvFromDate);
-			tvToDate = (TextView) findViewById(R.id.tvToDate);
-			tvFromTime = (TextView) findViewById(R.id.tvFromTime);
-			tvToTime = (TextView) findViewById(R.id.tvToTime);
-			btnUpdate = (Button) findViewById(R.id.dialogButtonUpdate);
-			btnCancel = (Button) findViewById(R.id.dialogButtonCancel);
-			ArrayList<String> devList = new ArrayList<String>();
-			if (getIntent() != null && getIntent().hasExtra("deviceListArray")) {
-				mList = getIntent().getParcelableArrayListExtra("deviceListArray");
-				mList = getUniqueDeviceList(mList);
-				Collections.sort(mList, new Comparator<DeviceListData>() {
-					@Override
-					public int compare(DeviceListData s1, DeviceListData s2) {
-						return s1.getDisplayName().compareToIgnoreCase(s2.getDisplayName());
-					}
-				});
-			}
-			for (int in = 0; in < mList.size(); in++) {
-				devList.add(mList.get(in).getDisplayName());
-			}
+                final Calendar c = Calendar.getInstance();
+                int mYear = c.get(Calendar.YEAR);
+                int mMonth = c.get(Calendar.MONTH);
+                int mDay = c.get(Calendar.DAY_OF_MONTH);
 
-			deviceList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, devList);
-			deviceList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spDeviceMap.setAdapter(deviceList);
-			
-			SimpleDateFormat todayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-			SimpleDateFormat todayTimeFormat = new SimpleDateFormat("HH:mm");
-			tvFromDate.setText(todayDateFormat.format(new Date()));
-			tvToDate.setText(todayDateFormat.format(new Date()));
-			tvFromTime.setText(todayTimeFormat.format(Calendar.getInstance().getTime()));
-			tvToTime.setText(todayTimeFormat.format(Calendar.getInstance().getTime()));
-			
-		} catch (Exception e) {
-			new Utils().showToast(getApplicationContext(), getResources().getString(R.string.error));
-		}
-	}
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MapSettingsActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                tvToDate.setText(String.format("%02d", monthOfYear + 1) + "/" + String.format("%02d", dayOfMonth) + "/" + year);
+
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+
+            }
+        });
+
+        tvFromTime.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                isFromTime = true;
+//                DialogFragment timeDialogFragment = new TimePickerDialogTheme();
+//                timeDialogFragment.show(getFragmentManager(), "From Time");
+
+                final Calendar c = Calendar.getInstance();
+                int mHour = c.get(Calendar.HOUR_OF_DAY);
+                int mMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MapSettingsActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+
+                                tvFromTime.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
+                                //backFrom = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+                            }
+                        }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+        tvToTime.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                isFromTime = false;
+//                DialogFragment timeDialogFragment = new TimePickerDialogTheme();
+//                timeDialogFragment.show(getFragmentManager(), "From Time");
+
+                final Calendar c = Calendar.getInstance();
+                int mHour = c.get(Calendar.HOUR_OF_DAY);
+                int mMinute = c.get(Calendar.MINUTE);
+
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MapSettingsActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                tvToTime.setText(String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute));
+
+                            }
+                        }, mHour, mMinute, false);
+                timePickerDialog.show();
+
+            }
+        });
+
+        btnCancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapSettingsActivity.this.finish();
+            }
+        });
+
+        btnUpdate.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+
+                try {
+                    String deviceId = mList.get(spDeviceMap.getSelectedItemPosition()).getDeviceID().toString();
+                    Log.v("DeviceID:" + deviceId, ":" + deviceId);
+
+                    String stvFromDate = tvFromDate.getText().toString();
+                    String stvToDate = tvToDate.getText().toString();
+                    String stvToTime = tvToTime.getText().toString();
+                    String stvFromTime = tvFromTime.getText().toString();
+
+                    //String stvFrom = backFrom;
+                    //String stvTo = backTo;
+                    SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+                    Date dfr = format.parse(stvFromDate);
+                    Date dto = format.parse(stvToDate);
+                    Date currentDate = new Date();
+
+                    if (!stvFromDate.equals("") && !stvFromTime.equals("") && !stvToDate.equals("") && !stvToTime.equals("")) {
+
+                        if ((dfr.before(dto) || dfr.equals(dto)) && (dfr.before(currentDate) || dfr.equals(currentDate))
+                                && (dto.before(currentDate) || dfr.equals(currentDate))) {
+
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra("deviceID", deviceId);
+                            // Have set fromDate in 'To' parameter & toDate in 'From' parameter because of Web service has set it by mistake.
+                            //Because of we do not want to change API war file we have set it in mobile app end. DT:19th AUG 2017
+                            returnIntent.putExtra("to", stvFromDate + " " + stvFromTime);
+                            returnIntent.putExtra("from", stvToDate + " " + stvToTime);
+                            returnIntent.putExtra("timeZone", "GMT");
+                            setResult(RESULT_OK, returnIntent);
+                            finish();
+
+                        } else {
+                            new Utils().showToast(getApplicationContext(),
+                                    getResources().getString(R.string.invalid_date_range));
+                        }
+
+                    } else {
+                        new Utils().showToast(getApplicationContext(), getResources().getString(R.string.all_fields_are_required));
+                    }
+                } catch (NullPointerException e) {
+                    new Utils().showToast(getApplicationContext(), getResources().getString(R.string.enter_date_first));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    new Utils().showToast(getApplicationContext(), getResources().getString(R.string.error));
+                }
+            }
+        });
+
+    }
+
+    public void init() {
+
+        try {
+            spDeviceMap = (Spinner) findViewById(R.id.spDeviceMap);
+            // spTimeZone = (Spinner) findViewById(R.id.spTimeZone);
+            tvFromDate = (TextView) findViewById(R.id.tvFromDate);
+            tvToDate = (TextView) findViewById(R.id.tvToDate);
+            tvFromTime = (TextView) findViewById(R.id.tvFromTime);
+            tvToTime = (TextView) findViewById(R.id.tvToTime);
+            btnUpdate = (Button) findViewById(R.id.dialogButtonUpdate);
+            btnCancel = (Button) findViewById(R.id.dialogButtonCancel);
+            ArrayList<String> devList = new ArrayList<String>();
+            if (getIntent() != null && getIntent().hasExtra("deviceListArray")) {
+                mList = getIntent().getParcelableArrayListExtra("deviceListArray");
+                mList = getUniqueDeviceList(mList);
+                Collections.sort(mList, new Comparator<DeviceListData>() {
+                    @Override
+                    public int compare(DeviceListData s1, DeviceListData s2) {
+                        return s1.getDisplayName().compareToIgnoreCase(s2.getDisplayName());
+                    }
+                });
+            }
+            for (int in = 0; in < mList.size(); in++) {
+                devList.add(mList.get(in).getDisplayName());
+            }
+
+            deviceList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, devList);
+            deviceList.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spDeviceMap.setAdapter(deviceList);
+
+            SimpleDateFormat todayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat todayTimeFormat = new SimpleDateFormat("HH:mm");
+            tvFromDate.setText(todayDateFormat.format(new Date()));
+            tvToDate.setText(todayDateFormat.format(new Date()));
+            tvFromTime.setText(todayTimeFormat.format(Calendar.getInstance().getTime()));
+            tvToTime.setText(todayTimeFormat.format(Calendar.getInstance().getTime()));
+
+        } catch (Exception e) {
+            new Utils().showToast(getApplicationContext(), getResources().getString(R.string.error));
+        }
+    }
 
 //	@Override
 //	protected Dialog onCreateDialog(int id) {
@@ -199,57 +281,61 @@ public class MapSettingsActivity extends Activity {
 //		return null;
 //	}
 
-	private class DatePickerDialogTheme extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+/*
+    public class DatePickerDialogTheme extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-		 @Override
-		 public Dialog onCreateDialog(Bundle savedInstanceState){
-		 final Calendar calendar = Calendar.getInstance();
-		 int year = calendar.get(Calendar.YEAR);
-		 int month = calendar.get(Calendar.MONTH);
-		 int day = calendar.get(Calendar.DAY_OF_MONTH);
-		 DatePickerDialog datepickerdialog = new DatePickerDialog(getActivity(),
-		 AlertDialog.THEME_DEVICE_DEFAULT_DARK,this,year,month,day);
-		 
-		 return datepickerdialog;
-		 }
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            DatePickerDialog datepickerdialog = new DatePickerDialog(getActivity(),
+                    AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, year, month, day);
 
-		 public void onDateSet(DatePicker view, int year, int month, int day){
-			 if (isFromDate) {
-					tvFromDate.setText(String.format("%02d", month + 1) + "/" + String.format("%02d", day) + "/" + year);
-					//backFrom = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+            return datepickerdialog;
+        }
 
-				} else {
-					tvToDate.setText(String.format("%02d", month + 1) + "/" + String.format("%02d", day) + "/" + year);
-					//backTo = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
-				}
-		 }
-		}
-	
-	
-	private class TimePickerDialogTheme extends DialogFragment implements OnTimeSetListener{
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            if (isFromDate) {
+                tvFromDate.setText(String.format("%02d", month + 1) + "/" + String.format("%02d", day) + "/" + year);
+                //backFrom = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
 
-		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			TimePickerDialog timepickerdialog = new TimePickerDialog(getActivity(),
-					 AlertDialog.THEME_DEVICE_DEFAULT_DARK,this,0,0,true);
-			return timepickerdialog;
-		}
+            } else {
+                tvToDate.setText(String.format("%02d", month + 1) + "/" + String.format("%02d", day) + "/" + year);
+                //backTo = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+            }
+        }
+    }
+*/
 
-		@Override
-		public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-			int hour = hourOfDay;
-			int min = minute;
-			if (isFromTime) {
-				tvFromTime.setText(String.format("%02d", hour) + ":" + String.format("%02d", min));
-				//backFrom = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
-			} else {
-				tvToTime.setText(String.format("%02d", hour) + ":" + String.format("%02d", min));
-				//backTo = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
-			}
-		}
-		
-	}
-	
+
+/*
+    public class TimePickerDialogTheme extends DialogFragment implements OnTimeSetListener {
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            TimePickerDialog timepickerdialog = new TimePickerDialog(getActivity(),
+                    AlertDialog.THEME_DEVICE_DEFAULT_DARK, this, 0, 0, true);
+            return timepickerdialog;
+        }
+
+        @Override
+        public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+            int hour = hourOfDay;
+            int min = minute;
+            if (isFromTime) {
+                tvFromTime.setText(String.format("%02d", hour) + ":" + String.format("%02d", min));
+                //backFrom = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+            } else {
+                tvToTime.setText(String.format("%02d", hour) + ":" + String.format("%02d", min));
+                //backTo = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+            }
+        }
+
+    }
+*/
+
 //	private TimePickerDialog.OnTimeSetListener timePickerListener = new OnTimeSetListener() {
 //		
 //		@Override
@@ -299,15 +385,15 @@ public class MapSettingsActivity extends Activity {
 //		}
 //	};
 
-	private ArrayList<DeviceListData> getUniqueDeviceList(ArrayList<DeviceListData> list) {
-		ArrayList<DeviceListData> uniqueList = new ArrayList<DeviceListData>();
-		ArrayList<String> enemyIds = new ArrayList<String>();
-		for (DeviceListData entry : list) {
-			if (!enemyIds.contains(entry.getDeviceID())) {
-				enemyIds.add(entry.getDeviceID());
-				uniqueList.add(entry);
-			}
-		}
-		return uniqueList;
-	}
+    private ArrayList<DeviceListData> getUniqueDeviceList(ArrayList<DeviceListData> list) {
+        ArrayList<DeviceListData> uniqueList = new ArrayList<DeviceListData>();
+        ArrayList<String> enemyIds = new ArrayList<String>();
+        for (DeviceListData entry : list) {
+            if (!enemyIds.contains(entry.getDeviceID())) {
+                enemyIds.add(entry.getDeviceID());
+                uniqueList.add(entry);
+            }
+        }
+        return uniqueList;
+    }
 }

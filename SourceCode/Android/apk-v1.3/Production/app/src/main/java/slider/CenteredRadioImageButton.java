@@ -13,7 +13,7 @@ public class CenteredRadioImageButton extends RadioButton {
 
 	public CenteredRadioImageButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		TypedArray a = context.obtainStyledAttributes(attrs,com.pinpointfleet.R.styleable.CompoundButton, 0, 0);
+		TypedArray a = context.obtainStyledAttributes(attrs,com.fleetanalytics.pinpointmobile.R.styleable.CompoundButton, 0, 0);
 		image = a.getDrawable(1);
 		setButtonDrawable(android.R.color.transparent);
 		a.recycle();

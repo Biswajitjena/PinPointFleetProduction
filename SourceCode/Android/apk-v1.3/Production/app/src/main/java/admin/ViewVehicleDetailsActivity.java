@@ -27,7 +27,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.pinpointfleet.R;
+import com.fleetanalytics.pinpointmobile.R;
 import com.pinpointfleet.Utils;
 
 public class ViewVehicleDetailsActivity extends Activity {

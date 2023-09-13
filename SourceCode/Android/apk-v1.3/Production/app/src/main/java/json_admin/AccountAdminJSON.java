@@ -9,11 +9,12 @@ import java.net.URL;
 
 import org.json.JSONObject;
 
-import com.pinpointfleet.R;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.fleetanalytics.pinpointmobile.R;
 
 public class AccountAdminJSON {
 
