@@ -1,7 +1,7 @@
 # PinPoint Fleet Production
-PinPoint Fleet iOS Mobile application
+PinPoint Fleet Android Mobile application
 
-## PinPoint iOS Mobile Application
+## PinPoint Android Mobile Application
 
 1. Removed No Data Found Popup
 2. Updated From Date starts from 12am Midnight instead current timestamps.
@@ -20,4 +20,4 @@ PinPoint Fleet iOS Mobile application
  - Bug fixes on character set
  - UI Improvements
  - Discarded the Deprecated Libraries
- - Version Compatibility
+ - Updated OS Version Compatibility
