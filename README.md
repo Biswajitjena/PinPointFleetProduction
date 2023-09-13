@@ -5,7 +5,7 @@ PinPoint Fleet Android Mobile application
 
 1. Removed No Data Found Popup
 2. Updated From Date starts from 12am Midnight instead current timestamps.
-3. Compatibility with latest version of iOS
+3. Compatibility with latest version of Android
 4. Removed Deprecated Source base
 5. Updated recompiled
 6. Rebuild the framework using latest iOS version and devices
